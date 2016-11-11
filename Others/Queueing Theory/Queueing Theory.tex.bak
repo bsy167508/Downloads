@@ -1,0 +1,6 @@
+\documentclass{article}
+\usepackage[a4paper, total={8in, 8in}]{geometry}
+\setlength{\columnsep}{0.7cm}
+\begin{document}
+
+\end{document}

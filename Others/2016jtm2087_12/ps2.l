@@ -1,0 +1,47 @@
+%{
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>>
+char line[200];
+float sgpa = 0;
+int credits = 0;
+int syytext = 0;
+%}
+%%
+.			{ strcpy(line,yytext);
+			  fprintf(yyout,"%s",line);
+			}
+['\n'] 			{ sgpa=sgpa/credits; 
+			  credits=0;
+			  printf("%f\n", sgpa); //appending calculated sgpa to the input line
+			  fprintf(yyout," SGPA=%f\n",sgpa);sgpa=0;
+			}
+[/][1-8][/][0-9]  	{ strcpy(line,yytext);
+			  fprintf(yyout,"%s",line); 
+			  credits+=(yytext[1]-48); 
+			  syytext = yytext[3]; 
+			  sgpa += (syytext - 48)*(yytext[1]-48);
+			}
+[/][1-8][/][P][/][A]	{ strcpy(line,yytext);
+			  fprintf(yyout,"%s",line);
+			}
+[/][1-8][/]"NP"[/][A]	{ strcpy(line,yytext);
+			  fprintf(yyout,"%s",line);
+			}
+[/][1-8][/][D]		{ strcpy(line,yytext);
+			  fprintf(yyout,"%s",line);
+			}
+%%
+int main(int argc, char *argv[])
+{
+yyin=fopen(argv[1],"rb");
+yyout=fopen(argv[2],"wb");
+yylex();
+fclose(yyin);
+fclose(yyout);
+
+}
+int yywrap()
+{
+return 1;
+}
